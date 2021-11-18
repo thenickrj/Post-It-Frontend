@@ -246,11 +246,9 @@ function Home() {
     // console.log(posts);
     setSearchPosts(
       posts.filter((post) => {
-        console.log(post);
         return post.body.toLowerCase().includes(searchTerm.toLowerCase());
       })
     );
-    console.log(searchPosts);
   }, [searchTerm]);
 
   return (

@@ -24,7 +24,9 @@ import { useHistory } from "react-router";
 import "../notify-popup.css";
 
 const Container = styled.div`
+  padding-bottom: 20px;
   .postCss {
+    width: 22rem;
     border-radius: 33px;
     background: #d6dcf5;
     box-shadow: -5px -5px 10px #5567ab, 5px 5px 10px #95b3ff;
@@ -89,6 +91,12 @@ const Container = styled.div`
   input[type="text"] {
     border-radius: 8px;
     border: 1px solid #857b7b;
+  }
+
+  @media screen and (max-width: 400px) {
+    .postCSS {
+      width: 20rem;
+    }
   }
 `;
 
@@ -211,7 +219,7 @@ function PostCards({ post, setDeleted }) {
 
   return (
     <Container>
-      <Card className="postCss" style={{ marginTop: "0rem", width: "22rem" }}>
+      <Card className="postCss" style={{ marginTop: "0rem" }}>
         <h1 style={{ padding: "5%" }}>{post.body}</h1>
         <footer
           style={{
