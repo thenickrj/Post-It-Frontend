@@ -213,27 +213,24 @@ function Login() {
     return re.test(String(emailCheck).toLowerCase());
   }
 
-
-  
-function loginTest() { 
-      const data = {
-        email: "test1@gmail.com",
-        password: "1234",
-      };
-      axios
-        .post("https://just-post--it.herokuapp.com/login", data)
-        .then((res) => {
-          console.log(res);
-          if (res.data === "Invalid Credentials") {
-            setErrorMsg(res.data);
-            setErrorStatus(true);
-          } else {
-            localStorage.setItem("userInfo", JSON.stringify(res.data));
-            // history.push("/");
-            setLoginRedirect(true);
-          }
-        });
-    
+  function loginTest() {
+    const data = {
+      email: "test1@gmail.com",
+      password: "1234",
+    };
+    axios
+      .post("https://just-post--it.herokuapp.com/login", data)
+      .then((res) => {
+        console.log(res);
+        if (res.data === "Invalid Credentials") {
+          setErrorMsg(res.data);
+          setErrorStatus(true);
+        } else {
+          localStorage.setItem("userInfo", JSON.stringify(res.data));
+          // history.push("/");
+          setLoginRedirect(true);
+        }
+      });
   }
 
   function login() {
@@ -355,7 +352,9 @@ function loginTest() {
         </div>
       </div>
       <div className="signup_redirect">
-        <button onClick={loginTest}>Click hereto login as a test user</button>
+        <button className="loginButton" onClick={loginTest}>
+          Click here to login as a test user!
+        </button>
       </div>
 
       <div className="signup_redirect">
