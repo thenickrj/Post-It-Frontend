@@ -7,6 +7,7 @@ import {
 import { faThumbsUp, faThumbtack } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./App.css";
+import ReactNotification from "react-notifications-component";
 
 import { useEffect, useState } from "react";
 import SignUp from "./Pages/SignUp";
@@ -30,6 +31,8 @@ function App() {
   }, []);
   return (
     <div>
+      <ReactNotification />
+
       <Router>
         <Switch>
           <Route path="/signup">
@@ -39,18 +42,8 @@ function App() {
             <Login />
           </Route>
           <Route exact path="/">
-            {userInfo !== null ? (
-              <>
-                <Header />
-                <Home />
-              </>
-            ) : (
-              <div className="App-header">
-                <h1>
-                  You need to <a href="/login">Login</a> first
-                </h1>
-              </div>
-            )}
+            <Header />
+            <Home />
           </Route>
         </Switch>
       </Router>

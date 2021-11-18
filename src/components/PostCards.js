@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Avatar, makeStyles } from "@material-ui/core";
+import { store } from "react-notifications-component";
 import {
   Accordion,
   Badge,
@@ -12,12 +13,15 @@ import {
   Row,
 } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
+import arrow from "../images/arrow.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import axios from "axios";
 import Comment from "./Comment";
 import moment from "moment";
+import { useHistory } from "react-router";
+import "../notify-popup.css";
 
 const Container = styled.div`
   .liked,
@@ -28,6 +32,17 @@ const Container = styled.div`
     cursor: pointer;
   }
 
+  .liked:hover {
+    box-shadow: 0px 15px 20px rgba(46, 229, 157, 0.4);
+    color: #fff;
+    transform: translateY(-7px);
+  }
+
+  .arrow {
+    width: 30px;
+    height: 30px;
+    transform: rotate(90deg);
+  }
   .notLiked {
     color: lightblue;
   }
@@ -81,28 +96,55 @@ function PostCards({ post, setDeleted }) {
   var [commentInput, setCommentInput] = useState("");
 
   const [showReplies, setShowReplies] = useState(false);
-  var userInfo = JSON.parse(localStorage.userInfo);
+  let history = useHistory();
+
+  // console.log(userInfo);
+  // var userInfo;
+  var userInfo = localStorage.userInfo
+    ? JSON.parse(localStorage.userInfo)
+    : undefined;
+
+  const notify = () => {
+    store.addNotification({
+      title: "You need to login first!!",
+      message: " ",
+      type: "warning",
+      background: "pink",
+      insert: "bottom",
+      container: "bottom-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    });
+  };
 
   function liking() {
     // fetch("http:localhost")
-    setLikeStatus(!likeStatus);
+    if (userInfo) {
+      setLikeStatus(!likeStatus);
 
-    const data = {
-      email: userInfo.email,
-      postId: post._id,
-    };
-    if (likeStatus) {
-      axios
-        .post("https://just-post--it.herokuapp.com/unLike", data)
-        .then((res) => {
-          setLikeNumber(likeNumber - 1);
-        });
+      const data = {
+        email: userInfo?.email,
+        postId: post._id,
+      };
+      if (likeStatus) {
+        axios
+          .post("https://just-post--it.herokuapp.com/unLike", data)
+          .then((res) => {
+            setLikeNumber(likeNumber - 1);
+          });
+      } else {
+        axios
+          .post("https://just-post--it.herokuapp.com/addLike", data)
+          .then((res) => {
+            setLikeNumber(likeNumber + 1);
+          });
+      }
     } else {
-      axios
-        .post("https://just-post--it.herokuapp.com/addLike", data)
-        .then((res) => {
-          setLikeNumber(likeNumber + 1);
-        });
+      notify();
     }
   }
 
@@ -115,7 +157,7 @@ function PostCards({ post, setDeleted }) {
   }
   useEffect(() => {
     fetch(
-      `https://just-post--it.herokuapp.com/likes/email=${userInfo.email}/post=${post._id}`
+      `https://just-post--it.herokuapp.com/likes/email=${userInfo?.email}/post=${post._id}`
     )
       .then((response) => response.json())
       .then((data) => {
@@ -126,6 +168,10 @@ function PostCards({ post, setDeleted }) {
 
     fetchComments();
   }, []);
+
+  const gotoLogin = () => {
+    history.push("/login");
+  };
 
   function deleteHandler() {
     if (window.confirm("Delete this post?")) {
@@ -142,7 +188,7 @@ function PostCards({ post, setDeleted }) {
 
   function addComment() {
     const data = {
-      name: userInfo.name,
+      name: userInfo?.name,
       body: commentInput,
       postId: post._id,
     };
@@ -209,16 +255,22 @@ function PostCards({ post, setDeleted }) {
                   fontSize: 18,
                 }}
               >
-                <Accordion.Toggle as={Card.Text} variant="link" eventKey="0">
+                <Accordion.Toggle
+                  style={{ display: "flex" }}
+                  as={Card.Text}
+                  variant="link"
+                  eventKey="0"
+                >
                   <span style={{ display: "flex" }}>
                     <FontAwesomeIcon className="comment" icon={faComment} />
                     <h3>{commentNumber}</h3>
                   </span>
+                  <img className="arrow" src={arrow} alt="" />
                 </Accordion.Toggle>
               </span>
 
               <div>
-                {post.userId === userInfo._id && (
+                {userInfo && post.userId === userInfo?._id && (
                   <Button
                     variant="danger"
                     className="mx-2"
@@ -237,26 +289,38 @@ function PostCards({ post, setDeleted }) {
                 {comments.map((comment) => (
                   <ListGroup.Item>
                     <Accordion>
-                      {console.log(comment)}
                       <Comment comment={comment} />
                     </Accordion>
                   </ListGroup.Item>
                 ))}
                 <ListGroup.Item>
-                  <input
-                    type="text"
-                    placeholder="Add a comment"
-                    value={commentInput}
-                    onChange={(e) => setCommentInput(e.target.value)}
-                  />
-                  <Button
-                    style={{ height: "28px" }}
-                    variant="primary"
-                    size="sm"
-                    onClick={addComment}
-                  >
-                    Add
-                  </Button>
+                  {userInfo ? (
+                    <>
+                      <input
+                        type="text"
+                        placeholder="Add a comment"
+                        value={commentInput}
+                        onChange={(e) => setCommentInput(e.target.value)}
+                      />
+                      <Button
+                        style={{ height: "28px" }}
+                        variant="primary"
+                        size="sm"
+                        onClick={addComment}
+                      >
+                        Add
+                      </Button>
+                    </>
+                  ) : (
+                    <Button
+                      style={{ height: "28px" }}
+                      variant="primary"
+                      size="sm"
+                      onClick={gotoLogin}
+                    >
+                      Need to login first
+                    </Button>
+                  )}
                 </ListGroup.Item>
               </ListGroup>
             </Accordion.Collapse>

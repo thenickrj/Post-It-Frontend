@@ -25,7 +25,9 @@ const PopUpBody = styled.div`
 
 function AddPost(props) {
   const [postInput, setPostInput] = useState("");
-  var userInfo = JSON.parse(localStorage.userInfo);
+  var userInfo = localStorage.userInfo
+    ? JSON.parse(localStorage.userInfo)
+    : undefined;
 
   function submitPost() {
     const data = {
@@ -86,10 +88,12 @@ function Home() {
   var [deleted, setDeleted] = useState(false);
 
   let history = useHistory();
-  var userInfo;
-  if (localStorage.userInfo) {
-    userInfo = JSON.parse(localStorage.userInfo) || undefined;
-  }
+  // var [userInfo, setUserInfo] = useState();
+  // console.log(userInfo);
+  // var userInfo;
+  var userInfo = localStorage.userInfo
+    ? JSON.parse(localStorage.userInfo)
+    : undefined;
 
   async function checkLogged() {
     if (localStorage.getItem("userInfo") == null) {
@@ -122,7 +126,9 @@ function Home() {
           <PostCards setDeleted={setDeleted} post={post} />
         ))}
       </div>
-      <AddPost show={modalShow} onHide={() => setModalShow(false)} />
+      {userInfo && (
+        <AddPost show={modalShow} onHide={() => setModalShow(false)} />
+      )}
     </Container>
   );
 }

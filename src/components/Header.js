@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Form,
@@ -14,13 +14,26 @@ import { Link, useHistory } from "react-router-dom";
 
 function Header() {
   let history = useHistory();
-  var userInfo = JSON.parse(localStorage.userInfo);
+  // var [userInfo, setUserInfo] = useState();
+  // if (localStorage.userInfo) {
+  //   setUserInfo(JSON.parse(localStorage.userInfo));
+  // }
+
+  var userInfo = localStorage.userInfo
+    ? JSON.parse(localStorage.userInfo)
+    : undefined;
 
   function logout() {
     localStorage.removeItem("userInfo");
     // window.location.href = "/login";
     history.push("/login");
   }
+
+  const gotoLogin = () => {
+    history.push("/login");
+  };
+
+  // console.log(userInfo);
 
   return (
     <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
@@ -43,8 +56,15 @@ function Header() {
           </Nav>
           <Nav>
             <>
-              <NavDropdown title={userInfo.name} id="collasible-nav-dropdown">
-                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+              <NavDropdown
+                title={userInfo ? userInfo.name : "Guest"}
+                id="collasible-nav-dropdown"
+              >
+                {userInfo ? (
+                  <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                ) : (
+                  <NavDropdown.Item onClick={gotoLogin}>Login</NavDropdown.Item>
+                )}
               </NavDropdown>
             </>
             {/* <Nav.Link href="/login">Login</Nav.Link> */}

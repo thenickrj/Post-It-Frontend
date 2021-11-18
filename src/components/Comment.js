@@ -8,7 +8,9 @@ function Comment({ comment }) {
 
   var [replyInput, setReplyInput] = useState("");
 
-  var userInfo = JSON.parse(localStorage.userInfo);
+  var userInfo = localStorage.userInfo
+    ? JSON.parse(localStorage.userInfo)
+    : undefined;
 
   function fetchReply() {
     fetch(
@@ -24,7 +26,7 @@ function Comment({ comment }) {
 
   function addReply() {
     const data = {
-      name: userInfo.name,
+      name: userInfo?.name,
       body: replyInput,
       postId: comment.postId,
       commentId: comment._id,
@@ -48,10 +50,13 @@ function Comment({ comment }) {
             marginTop: "0rem",
             display: "flex",
             justifyContent: "space-between",
+            objectFit: "contain",
           }}
           className="blockquote-footer"
         >
-          <cite title="Source Title">{comment.name}</cite>
+          <cite style={{ padding: "5px" }} title="Source Title">
+            {comment.name}
+          </cite>
           <Avatar
             alt="Profile"
             src={`https://joeschmoe.io/api/v1/${comment?.name}`}
