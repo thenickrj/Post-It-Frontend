@@ -1,19 +1,40 @@
 import React, { useState, useEffect } from "react";
 import PostCards from "../components/PostCards";
 import styled from "styled-components";
-import { Button, Form, Modal } from "react-bootstrap";
+import {
+  Accordion,
+  Badge,
+  Button,
+  Card,
+  Col,
+  ListGroup,
+  Nav,
+  Navbar,
+  Row,
+  Form,
+  Modal,
+} from "react-bootstrap";
 import axios from "axios";
 import { useHistory } from "react-router";
 import { store } from "react-notifications-component";
-import { FormControl } from "@material-ui/core";
+import { Avatar, FormControl } from "@material-ui/core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComment, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 
 const Container = styled.div`
   background: #d6dcf5;
+  min-height: 100vh;
 
   .container {
     display: grid;
     grid-gap: 5rem;
     grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  }
+
+  .notFound {
+    text-align: center;
+    font-size: 30px;
+    padding: 20px;
   }
 
   .searchBar {
@@ -40,12 +61,38 @@ const Container = styled.div`
 `;
 
 const PopUpBody = styled.div`
+  .cssShadow {
+    background: #d6dcf5;
+    box-shadow: -5px -5px 10px #5567ab, 5px 5px 10px #95b3ff;
+    border: 1px solid black;
+  }
+
+  .postCss {
+    margin: auto;
+    margin-bottom: 10px;
+    border-radius: 33px;
+    background: #d6dcf5;
+    box-shadow: -5px -5px 10px #5567ab, 5px 5px 10px #95b3ff;
+  }
+
   input[type="text"] {
     border: 1px solid #857b7b;
     font-size: 30px;
     border-radius: 15px;
     height: 50px;
     width: 90%;
+  }
+
+  .liked,
+  .notLiked,
+  .comment {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+  }
+
+  .comment {
+    color: #62bbed;
   }
 `;
 
@@ -82,13 +129,53 @@ function AddPost(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="cssShadow">
         <Modal.Title id="contained-modal-title-vcenter">
           Just Post it!
         </Modal.Title>
       </Modal.Header>
-      <Modal.Body>
+      <Modal.Body style={{ background: "#d6dcf5" }}>
         <PopUpBody>
+          <Card
+            className="postCss"
+            style={{ marginTop: "0rem", width: "22rem" }}
+          >
+            <h1 style={{ padding: "5%" }}>{postInput}</h1>
+            <footer
+              style={{
+                paddingLeft: "20%",
+                display: "flex",
+                justifyContent: "center",
+              }}
+              className="blockquote-footer"
+            >
+              <cite title="Source Title">
+                <Avatar
+                  alt="Profile"
+                  src={`https://joeschmoe.io/api/v1/${userInfo?.name}`}
+                  // className={classes.avatarImage}
+                  style={{ backgroundColor: "#7C7F90" }}
+                />
+                {userInfo.name}
+              </cite>
+            </footer>
+
+            <Accordion>
+              <Card style={{ margin: 10 }}>
+                <Card.Header
+                  style={{ display: "flex", justifyContent: "space-evenly" }}
+                >
+                  <FontAwesomeIcon
+                    className="liked"
+                    style={{ color: "#62bbed" }}
+                    icon={faThumbsUp}
+                  />
+                  <FontAwesomeIcon className="comment" icon={faComment} />
+                </Card.Header>
+              </Card>
+            </Accordion>
+          </Card>
+
           <input
             type="text"
             placeholder="Type here..."
@@ -121,6 +208,10 @@ function Home() {
     ? JSON.parse(localStorage.userInfo)
     : undefined;
 
+  const [searchTerm, setSearchTerm] = useState("");
+  const [search, setSearch] = useState(false);
+  const [searchPosts, setSearchPosts] = useState([]);
+
   const notify = (title, type) => {
     store.addNotification({
       title: title,
@@ -148,9 +239,19 @@ function Home() {
     fetch("https://just-post--it.herokuapp.com/post")
       .then((response) => response.json())
       .then((data) => setPosts(data));
-
-    // checkLogged();
   }, [modalShow, deleted]);
+
+  //Filter out the posts based on the User Input (searchTerm)
+  useEffect(() => {
+    // console.log(posts);
+    setSearchPosts(
+      posts.filter((post) => {
+        console.log(post);
+        return post.body.toLowerCase().includes(searchTerm.toLowerCase());
+      })
+    );
+    console.log(searchPosts);
+  }, [searchTerm]);
 
   return (
     <Container>
@@ -159,10 +260,10 @@ function Home() {
         className="searchBar"
         type="text"
         placeholder="🔍 Search..."
-        // value={searchTerm}
-        // onChange={(e) => {
-        //   setSearchTerm(e.target.value);
-        // }}
+        value={searchTerm}
+        onChange={(e) => {
+          setSearchTerm(e.target.value);
+        }}
       />
       <img
         className="addImg"
@@ -179,10 +280,29 @@ function Home() {
       <br />
       <br />
       <div className="container">
-        {posts.map((post) => (
-          <PostCards className="postCSS" setDeleted={setDeleted} post={post} />
-        ))}
+        {searchTerm.length == 0 &&
+          posts.map((post) => (
+            <PostCards
+              className="postCSS"
+              setDeleted={setDeleted}
+              post={post}
+            />
+          ))}
+        {searchTerm.length > 0 &&
+          searchPosts.length > 0 &&
+          searchPosts.map((post) => (
+            <PostCards
+              className="postCSS"
+              setDeleted={setDeleted}
+              post={post}
+            />
+          ))}
       </div>
+      {searchTerm && searchPosts.length === 0 && (
+        <div className="notFound">
+          No Coin with the word {searchTerm} found{" "}
+        </div>
+      )}
       {userInfo && (
         <AddPost show={modalShow} onHide={() => setModalShow(false)} />
       )}
