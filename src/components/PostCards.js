@@ -210,7 +210,10 @@ function PostCards({ post, setDeleted }) {
         style={{ marginTop: "0rem", width: "22rem", border: "1px solid black" }}
       >
         <h1 style={{ padding: "5%" }}>{post.body}</h1>
-        <footer style={{ paddingLeft: "20%" }} className="blockquote-footer">
+        <footer
+          style={{ paddingLeft: "20%", display: "flex" }}
+          className="blockquote-footer"
+        >
           <cite title="Source Title">
             <Avatar
               alt="Profile"
