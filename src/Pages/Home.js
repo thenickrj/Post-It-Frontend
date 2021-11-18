@@ -300,7 +300,7 @@ function Home() {
       </div>
       {searchTerm && searchPosts.length === 0 && (
         <div className="notFound">
-          No Coin with the word {searchTerm} found{" "}
+          No Post with the word {searchTerm} found{" "}
         </div>
       )}
       {userInfo && (
