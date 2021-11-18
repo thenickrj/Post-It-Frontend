@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Avatar, makeStyles } from "@material-ui/core";
 import {
   Accordion,
   Badge,
@@ -162,7 +163,15 @@ function PostCards({ post, setDeleted }) {
       >
         <h1 style={{ padding: "5%" }}>{post.body}</h1>
         <footer style={{ paddingLeft: "20%" }} className="blockquote-footer">
-          <cite title="Source Title"> {post.name}</cite>
+          <cite title="Source Title">
+            <Avatar
+              alt="Profile"
+              src={`https://joeschmoe.io/api/v1/${post?.name}`}
+              // className={classes.avatarImage}
+              style={{ backgroundColor: "#7C7F90" }}
+            />
+            {post.name}
+          </cite>
         </footer>
         <Card.Footer className="text-muted">
           {moment(post.createdAt).format("D MMMM YYYY")}
@@ -209,13 +218,15 @@ function PostCards({ post, setDeleted }) {
               </span>
 
               <div>
-                <Button
-                  variant="danger"
-                  className="mx-2"
-                  onClick={deleteHandler}
-                >
-                  Delete Post
-                </Button>
+                {post.userId === userInfo._id && (
+                  <Button
+                    variant="danger"
+                    className="mx-2"
+                    onClick={deleteHandler}
+                  >
+                    Delete Post
+                  </Button>
+                )}
               </div>
             </Card.Header>
             <Accordion.Collapse eventKey="0">
