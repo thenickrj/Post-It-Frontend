@@ -237,6 +237,7 @@ function PostCards({ post, setDeleted }) {
                 {comments.map((comment) => (
                   <ListGroup.Item>
                     <Accordion>
+                      {console.log(comment)}
                       <Comment comment={comment} />
                     </Accordion>
                   </ListGroup.Item>

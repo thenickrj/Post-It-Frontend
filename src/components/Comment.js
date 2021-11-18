@@ -1,3 +1,4 @@
+import { Avatar } from "@material-ui/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Accordion, Button, Card, ListGroup } from "react-bootstrap";
@@ -42,8 +43,25 @@ function Comment({ comment }) {
     <div>
       <span className="comment_section">
         <p>{comment.body}</p>
-        <footer style={{ marginTop: "0rem" }} className="blockquote-footer">
+        <footer
+          style={{
+            marginTop: "0rem",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          className="blockquote-footer"
+        >
           <cite title="Source Title">{comment.name}</cite>
+          <Avatar
+            alt="Profile"
+            src={`https://joeschmoe.io/api/v1/${comment?.name}`}
+            // className={classes.avatarImage}
+            style={{
+              backgroundColor: "#7C7F90",
+              height: "25px",
+              width: "25px",
+            }}
+          />
         </footer>
 
         <Accordion.Toggle as={Card.Text} variant="link" eventKey="1">

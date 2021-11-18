@@ -30,6 +30,7 @@ function AddPost(props) {
   function submitPost() {
     const data = {
       body: postInput,
+      userId: userInfo._id,
       name: userInfo.name,
       email: userInfo.email,
       likeCount: 0,
