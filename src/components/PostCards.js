@@ -24,6 +24,11 @@ import { useHistory } from "react-router";
 import "../notify-popup.css";
 
 const Container = styled.div`
+  .postCss {
+    border-radius: 33px;
+    background: #d6dcf5;
+    box-shadow: -5px -5px 10px #5567ab, 5px 5px 10px #95b3ff;
+  }
   .liked,
   .notLiked,
   .comment {
@@ -206,12 +211,14 @@ function PostCards({ post, setDeleted }) {
 
   return (
     <Container>
-      <Card
-        style={{ marginTop: "0rem", width: "22rem", border: "1px solid black" }}
-      >
+      <Card className="postCss" style={{ marginTop: "0rem", width: "22rem" }}>
         <h1 style={{ padding: "5%" }}>{post.body}</h1>
         <footer
-          style={{ paddingLeft: "20%", display: "flex" }}
+          style={{
+            paddingLeft: "20%",
+            display: "flex",
+            justifyContent: "center",
+          }}
           className="blockquote-footer"
         >
           <cite title="Source Title">
@@ -279,6 +286,7 @@ function PostCards({ post, setDeleted }) {
                   <Button
                     variant="danger"
                     className="mx-2"
+                    style={{ background: "#158CBA", borderColor: "#115b77" }}
                     onClick={deleteHandler}
                   >
                     Delete Post

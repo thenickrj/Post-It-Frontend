@@ -1,16 +1,41 @@
 import React, { useState, useEffect } from "react";
 import PostCards from "../components/PostCards";
 import styled from "styled-components";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useHistory } from "react-router";
 import { store } from "react-notifications-component";
+import { FormControl } from "@material-ui/core";
 
 const Container = styled.div`
+  background: #d6dcf5;
+
   .container {
     display: grid;
     grid-gap: 5rem;
     grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  }
+
+  .searchBar {
+    margin: 0 5%;
+    border-radius: 20px;
+    height: 30px;
+    outline: none;
+    margin-right: 50%;
+    background: #d6dcf5;
+    box-shadow: -5px -5px 10px #858dac, 5px 5px 10px #e7f5ff;
+  }
+
+  input[type="text"]::placeholder {
+    font-family: "Poppins", sans-serif;
+    font-weight: bold;
+    color: black;
+  }
+
+  .addImg {
+    border-radius: 33px;
+    background: #d6dcf5;
+    box-shadow: -5px -5px 10px #5567ab, 5px 5px 10px #95b3ff;
   }
 `;
 
@@ -130,7 +155,17 @@ function Home() {
   return (
     <Container>
       <br />
+      <input
+        className="searchBar"
+        type="text"
+        placeholder="🔍 Search..."
+        // value={searchTerm}
+        // onChange={(e) => {
+        //   setSearchTerm(e.target.value);
+        // }}
+      />
       <img
+        className="addImg"
         style={{ margin: "10px 45%", cursor: "pointer" }}
         width="50px"
         src="https://findicons.com/files/icons/2443/bunch_of_cool_bluish_icons/512/add.png"
@@ -145,7 +180,7 @@ function Home() {
       <br />
       <div className="container">
         {posts.map((post) => (
-          <PostCards setDeleted={setDeleted} post={post} />
+          <PostCards className="postCSS" setDeleted={setDeleted} post={post} />
         ))}
       </div>
       {userInfo && (
