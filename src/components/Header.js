@@ -14,10 +14,6 @@ import { Link, useHistory } from "react-router-dom";
 
 function Header() {
   let history = useHistory();
-  // var [userInfo, setUserInfo] = useState();
-  // if (localStorage.userInfo) {
-  //   setUserInfo(JSON.parse(localStorage.userInfo));
-  // }
 
   var userInfo = localStorage.userInfo
     ? JSON.parse(localStorage.userInfo)

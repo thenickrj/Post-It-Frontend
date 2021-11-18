@@ -2,6 +2,7 @@ import { Avatar } from "@material-ui/core";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Accordion, Button, Card, ListGroup } from "react-bootstrap";
+import { useHistory } from "react-router";
 
 function Comment({ comment }) {
   var [reply, setReply] = useState([]);
@@ -11,6 +12,8 @@ function Comment({ comment }) {
   var userInfo = localStorage.userInfo
     ? JSON.parse(localStorage.userInfo)
     : undefined;
+
+  let history = useHistory();
 
   function fetchReply() {
     fetch(
@@ -23,6 +26,10 @@ function Comment({ comment }) {
   useEffect(() => {
     fetchReply();
   }, []);
+
+  const gotoLogin = () => {
+    history.push("/login");
+  };
 
   function addReply() {
     const data = {
@@ -81,20 +88,33 @@ function Comment({ comment }) {
             <ListGroup.Item>{rep.body}</ListGroup.Item>
           ))}
           <ListGroup.Item>
-            <input
-              type="text"
-              placeholder="Add a comment"
-              value={replyInput}
-              onChange={(e) => setReplyInput(e.target.value)}
-            />
-            <Button
-              style={{ height: "25px", marginBottom: "5px" }}
-              variant="primary"
-              size="sm"
-              onClick={addReply}
-            >
-              Add
-            </Button>
+            {userInfo ? (
+              <>
+                <input
+                  type="text"
+                  placeholder="Add a comment"
+                  value={replyInput}
+                  onChange={(e) => setReplyInput(e.target.value)}
+                />
+                <Button
+                  style={{ height: "25px", marginBottom: "5px" }}
+                  variant="primary"
+                  size="sm"
+                  onClick={addReply}
+                >
+                  Add
+                </Button>
+              </>
+            ) : (
+              <Button
+                style={{ height: "28px" }}
+                variant="primary"
+                size="sm"
+                onClick={gotoLogin}
+              >
+                Need to login first
+              </Button>
+            )}
           </ListGroup.Item>
         </ListGroup>
       </Accordion.Collapse>

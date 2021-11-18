@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Button, Modal } from "react-bootstrap";
 import axios from "axios";
 import { useHistory } from "react-router";
+import { store } from "react-notifications-component";
 
 const Container = styled.div`
   .container {
@@ -95,6 +96,23 @@ function Home() {
     ? JSON.parse(localStorage.userInfo)
     : undefined;
 
+  const notify = (title, type) => {
+    store.addNotification({
+      title: title,
+      message: " ",
+      type: type,
+      background: "pink",
+      insert: "bottom",
+      container: "bottom-right",
+      animationIn: ["animate__animated", "animate__fadeIn"],
+      animationOut: ["animate__animated", "animate__fadeOut"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+      },
+    });
+  };
+
   async function checkLogged() {
     if (localStorage.getItem("userInfo") == null) {
       history.push("/login");
@@ -117,7 +135,11 @@ function Home() {
         width="50px"
         src="https://findicons.com/files/icons/2443/bunch_of_cool_bluish_icons/512/add.png"
         alt=""
-        onClick={() => setModalShow(true)}
+        onClick={() =>
+          userInfo
+            ? setModalShow(true)
+            : notify("Need to login to post", "warning")
+        }
       />
       <br />
       <br />

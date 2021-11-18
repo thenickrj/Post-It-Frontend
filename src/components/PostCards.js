@@ -104,11 +104,11 @@ function PostCards({ post, setDeleted }) {
     ? JSON.parse(localStorage.userInfo)
     : undefined;
 
-  const notify = () => {
+  const notify = (title, type) => {
     store.addNotification({
-      title: "You need to login first!!",
+      title: title,
       message: " ",
-      type: "warning",
+      type: type,
       background: "pink",
       insert: "bottom",
       container: "bottom-right",
@@ -135,16 +135,18 @@ function PostCards({ post, setDeleted }) {
           .post("https://just-post--it.herokuapp.com/unLike", data)
           .then((res) => {
             setLikeNumber(likeNumber - 1);
+            notify("You have unliked the post!", "default");
           });
       } else {
         axios
           .post("https://just-post--it.herokuapp.com/addLike", data)
           .then((res) => {
             setLikeNumber(likeNumber + 1);
+            notify("You have liked the post!", "default");
           });
       }
     } else {
-      notify();
+      notify("You need to login to like!", "warning");
     }
   }
 
