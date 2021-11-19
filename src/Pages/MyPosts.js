@@ -278,7 +278,7 @@ function MyPosts() {
           <h1
             style={{
               color: "#158CBA",
-              margin: "10px 38%",
+              margin: "0 0 0 38%",
               cursor: "pointer",
               width: "100%",
               fontWeight: "bold",
