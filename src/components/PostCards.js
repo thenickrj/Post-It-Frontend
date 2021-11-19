@@ -150,6 +150,7 @@ const PopUpBody = styled.div`
 
 function EditPost({ show, setUpdated, post, onHide }) {
   const [postInput, setPostInput] = useState(post.body);
+  var [status, setStatus] = useState(false);
   var userInfo = localStorage.userInfo
     ? JSON.parse(localStorage.userInfo)
     : undefined;
@@ -161,14 +162,14 @@ function EditPost({ show, setUpdated, post, onHide }) {
       body: postInput,
       createdAt: dateModified,
     };
-    console.log(data);
 
     axios
       .post("https://just-post--it.herokuapp.com/post/update=" + post._id, data)
       .then((res) => {
         // fetchReply();
         onHide();
-        setUpdated(true);
+        setStatus(!status);
+        setUpdated(status);
       });
     // setPostInput("");
   }
@@ -388,7 +389,7 @@ function PostCards({ post, setDeleted, setUpdated }) {
           className="text-muted"
           style={{ display: "flex", justifyContent: "space-between" }}
         >
-          {moment(post.createdAt).format("D MMMM YYYY")}
+          {moment(post.updatedAt).format("D MMMM YYYY")}
           {userInfo && post.userId === userInfo?._id && (
             <img
               onClick={() => setModalShow(true)}
