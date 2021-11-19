@@ -199,6 +199,7 @@ function Home() {
   // var userInfo = JSON.parse(localStorage.userInfo);
 
   var [deleted, setDeleted] = useState(false);
+  var [update, setUpdated] = useState(false);
 
   let history = useHistory();
   // var [userInfo, setUserInfo] = useState();
@@ -239,7 +240,7 @@ function Home() {
     fetch("https://just-post--it.herokuapp.com/post")
       .then((response) => response.json())
       .then((data) => setPosts(data));
-  }, [modalShow, deleted]);
+  }, [modalShow, deleted, update]);
 
   //Filter out the posts based on the User Input (searchTerm)
   useEffect(() => {
@@ -284,6 +285,7 @@ function Home() {
               className="postCSS"
               setDeleted={setDeleted}
               post={post}
+              setUpdated={setUpdated}
             />
           ))}
         {searchTerm.length > 0 &&
@@ -293,6 +295,7 @@ function Home() {
               className="postCSS"
               setDeleted={setDeleted}
               post={post}
+              setUpdated={setUpdated}
             />
           ))}
       </div>
