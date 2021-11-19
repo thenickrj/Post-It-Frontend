@@ -8,6 +8,7 @@ import {
   NavDropdown,
 } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom";
+import { Redirect } from "react-router";
 // import { useDispatch, useSelector } from "react-redux";
 // import {} from "react-router-dom";
 // import { logout } from "../actions/userActions";
@@ -57,7 +58,10 @@ function Header() {
                 id="collasible-nav-dropdown"
               >
                 {userInfo ? (
-                  <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                  <>
+                    {/* <NavDropdown.Item href="/profile">Profile</NavDropdown.Item> */}
+                    <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
+                  </>
                 ) : (
                   <NavDropdown.Item onClick={gotoLogin}>Login</NavDropdown.Item>
                 )}

@@ -169,7 +169,7 @@ function EditPost({ show, setUpdated, post, onHide }) {
         // fetchReply();
         onHide();
         setStatus(!status);
-        setUpdated(status);
+        setUpdated(!status);
       });
   }
 
