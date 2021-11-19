@@ -15,6 +15,8 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Header from "./components/Header";
 import { useHistory } from "react-router";
+import Profile from "./Pages/Profile";
+import MyPosts from "./Pages/MyPosts";
 
 // const Container = styled.div``;
 
@@ -40,6 +42,13 @@ function App() {
           </Route>
           <Route exact path="/login">
             <Login />
+          </Route>
+          <Route exact path="/profile">
+            <Profile />
+          </Route>
+          <Route exact path="/mypost">
+            <Header />
+            <MyPosts />
           </Route>
           <Route exact path="/">
             <Header />

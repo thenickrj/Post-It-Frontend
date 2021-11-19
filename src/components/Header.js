@@ -35,7 +35,7 @@ function Header() {
   return (
     <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
       <Container>
-        <Navbar.Brand>
+        <Navbar.Brand href="/">
           <h1>Post It!</h1>
         </Navbar.Brand>
 
@@ -60,6 +60,7 @@ function Header() {
                 {userInfo ? (
                   <>
                     {/* <NavDropdown.Item href="/profile">Profile</NavDropdown.Item> */}
+                    <NavDropdown.Item href="/mypost">My Posts</NavDropdown.Item>
                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                   </>
                 ) : (
