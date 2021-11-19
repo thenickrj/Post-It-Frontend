@@ -171,7 +171,6 @@ function EditPost({ show, setUpdated, post, onHide }) {
         setStatus(!status);
         setUpdated(status);
       });
-    // setPostInput("");
   }
 
   return (
@@ -366,7 +365,7 @@ function PostCards({ post, setDeleted, setUpdated }) {
   return (
     <Container>
       <Card className="postCss" style={{ marginTop: "0rem" }}>
-        <h1 style={{ padding: "5%" }}>{post.body}</h1>
+        <h2 style={{ padding: "5%" }}>{post.body}</h2>
         <footer
           style={{
             paddingLeft: "20%",
