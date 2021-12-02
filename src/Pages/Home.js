@@ -20,6 +20,7 @@ import { store } from "react-notifications-component";
 import { Avatar, FormControl } from "@material-ui/core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+import Loader from "react-loader-spinner";
 
 const Container = styled.div`
   background: #d6dcf5;
@@ -29,6 +30,12 @@ const Container = styled.div`
     display: grid;
     grid-gap: 5rem;
     grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+  }
+
+  .centerFlex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .notFound {
@@ -194,6 +201,7 @@ function AddPost(props) {
 function Home() {
   let data = [1, 2, 3, 4];
   var [posts, setPosts] = useState([]);
+  var [users, setUsers] = useState([]);
   const [modalShow, setModalShow] = useState(false);
 
   // var userInfo = JSON.parse(localStorage.userInfo);
@@ -240,6 +248,10 @@ function Home() {
     fetch("https://just-post--it.herokuapp.com/post")
       .then((response) => response.json())
       .then((data) => setPosts(data));
+
+    fetch("https://just-post--it.herokuapp.com/users")
+      .then((response) => response.json())
+      .then((data) => setUsers(data));
   }, [modalShow, deleted, update]);
 
   //Filter out the posts based on the User Input (searchTerm)
@@ -278,13 +290,52 @@ function Home() {
       />
       <br />
       <br />
-      <div className="container">
+      {posts ? (
+        <div className="container">
+          {searchTerm.length == 0 &&
+            posts.map((post) => (
+              <PostCards
+                className="postCSS"
+                setDeleted={setDeleted}
+                post={post}
+                users={users}
+                setUpdated={setUpdated}
+              />
+            ))}
+          {searchTerm.length > 0 &&
+            searchPosts.length > 0 &&
+            searchPosts.map((post) => (
+              <PostCards
+                className="postCSS"
+                setDeleted={setDeleted}
+                post={post}
+                users={users}
+                setUpdated={setUpdated}
+              />
+            ))}
+        </div>
+      ) : (
+        <>
+          <div className="centerFlex">
+            <Loader
+              type="Bars"
+              color="#00BFFF"
+              height={100}
+              width={100}
+              // timeout={3000} //3 secs
+            />
+          </div>
+        </>
+      )}
+
+      {/* <div className="container">
         {searchTerm.length == 0 &&
           posts.map((post) => (
             <PostCards
               className="postCSS"
               setDeleted={setDeleted}
               post={post}
+              users={users}
               setUpdated={setUpdated}
             />
           ))}
@@ -295,10 +346,11 @@ function Home() {
               className="postCSS"
               setDeleted={setDeleted}
               post={post}
+              users={users}
               setUpdated={setUpdated}
             />
           ))}
-      </div>
+      </div> */}
       {searchTerm && searchPosts.length === 0 && (
         <div className="notFound">
           No Post with the word {searchTerm} found{" "}

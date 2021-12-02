@@ -243,13 +243,21 @@ function EditPost({ show, setUpdated, post, onHide }) {
   );
 }
 
-function PostCards({ post, setDeleted, setUpdated }) {
+function PostCards({ post, users, setDeleted, setUpdated }) {
   var [likeStatus, setLikeStatus] = useState(false);
   var [likeNumber, setLikeNumber] = useState(post.likeCount);
+
+  // var [likeList, setLikeList] = useState([]);
+  var likeList = [];
+  // var userEmail = users.map((user) => {
+  //   return user.email;
+  // });
 
   var [comments, setComments] = useState([]);
   var [commentNumber, setCommentNumber] = useState(post.commentCount);
   var [commentInput, setCommentInput] = useState("");
+
+  var [likeUsers, setLikeUsers] = useState([]);
 
   const [modalShow, setModalShow] = useState(false);
 
@@ -315,6 +323,7 @@ function PostCards({ post, setDeleted, setUpdated }) {
 
     setCommentInput("");
   }
+
   useEffect(() => {
     fetch(
       `https://just-post--it.herokuapp.com/likes/email=${userInfo?.email}/post=${post._id}`
@@ -326,6 +335,20 @@ function PostCards({ post, setDeleted, setUpdated }) {
         }
       });
 
+    // fetch(`https://just-post--it.herokuapp.com/likes/post=${post._id}`)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     var dataEmail = data.map((user) => {
+    //       return user.email;
+    //     });
+
+    //     dataEmail.map((email) => {
+    //       console.log(userEmail.includes(email));
+    //       if (userEmail.includes(email)) {
+    //         likeUsers.push(email);
+    //       }
+    //     });
+    //   });
     fetchComments();
   }, []);
 
